@@ -2,7 +2,16 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
+
+// swagger UI
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./openapi.json');
+
 app.use(express.json());
+
+// app.use for swagger ui
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 // In-memory task list with 3 example tasks
 
