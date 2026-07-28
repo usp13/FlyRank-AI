@@ -4,8 +4,21 @@ const app = express();
 
 const PORT = 3000;
 
+// Middleware to parse JSON
+app.use(express.json());
+
+// GET /  - home or base  
 app.get('/', (req, res) => {
-  res.send('Hello from Task API stage 0 !');
+  res.json({
+    name: "Task API",
+    version: "1.0",
+    endpoints: ["/tasks"]
+  });
+});
+
+// GET /health -  Health check
+app.get('/health', (req, res) => {
+  res.json({ status: "ok" });
 });
 
 app.listen(PORT, () => {
