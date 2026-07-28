@@ -77,6 +77,56 @@ app.post('/tasks', (req, res) => {
 });
 
 
+// PUT /tasks/:id - Update a task
+app.put('/tasks/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const task = tasks.find(t => t.id === id);
+  
+  // Check if task exists
+  if (!task) {
+    return res.status(404).json({ error: `Task ${id} not found` });
+  }
+  
+  // Validate and update title if provided
+  if (req.body.title !== undefined) {
+    if (!req.body.title || req.body.title.trim() === '') {
+      return res.status(400).json({ error: "Title cannot be empty" });
+    }
+    task.title = req.body.title.trim();
+  }
+  
+  // Update done if provided
+  if (req.body.done !== undefined) {
+    task.done = Boolean(req.body.done);
+  }
+  
+  res.json(task);
+});
+
+// DELETE /tasks/:id - Delete a task
+app.delete('/tasks/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = tasks.findIndex(t => t.id === id);
+  
+  // Check if task exists
+  if (index === -1) {
+    return res.status(404).json({ error: `Task ${id} not found` });
+  }
+  
+  // Remove from list
+  tasks.splice(index, 1);
+  
+  // Return 204 No Content
+  res.status(204).send();
+});
+
+
+
+
+
+
+
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
