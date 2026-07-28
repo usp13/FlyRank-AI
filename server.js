@@ -47,6 +47,36 @@ app.get('/tasks/:id', (req, res) => {
   res.json(task);
 });
 
+
+
+// POST /tasks - Create a new task
+
+app.post('/tasks', (req, res) => {
+  const { title } = req.body;
+  
+  // Validation: title must exist and not be empty
+  if (!title || title.trim() === '') {
+    return res.status(400).json({ error: "Title is required and cannot be empty" });
+  }
+  
+  // Generate next id
+  const nextId = Math.max(...tasks.map(t => t.id), 0) + 1;
+  
+  // Create new task
+  const newTask = {
+    id: nextId,
+    title: title.trim(),
+    done: false
+  };
+  
+  // Add to list
+  tasks.push(newTask);
+  
+  // Return with 201 Created status
+  res.status(201).json(newTask);
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
